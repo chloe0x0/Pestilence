@@ -1,38 +1,58 @@
 package Pestilence;
 // The Pathogen object stores information relevant to the simulation, such as infectious period, recovery rate, and attack rate
-// Recovery Rate: percent chance of an Infected individual gaining immunity
-// The infectious period: number of epochs an indiviudal will be infectious for. Transfering to either dead, recovered, or susceptible
-// attack rate: given an infected cell and a Susceptible neighbour, the probability that it will sucessfully transmit the Pathogen
+// R0 : probability of succesfully infecting a susceptible cell
+// Immunity Gain : probability of an infected cell transfering to the Immune state
+// Fatality : probability of an infected cell transfering to the Dead state
+// incubation : incubation period, baseline time for a cell to stay in the Incubating stage
+// infectious : the infectious period of the Pathogen
 public class Pathogen {
-    private double recovery_rate, inf_period, attack_rate;
-    
-    public Pathogen(double recovery_rate, double inf_period, double attack_rate){
-        this.recovery_rate = recovery_rate;
-        this.inf_period = inf_period;
-        this.attack_rate = attack_rate;
+    private double R0, immunity_gain, fatality;
+    private int incubation, infectious;
+    public Pathogen(double R0, double fatality, int incubation, int infectious, double immunity_gain){
+        this.immunity_gain = immunity_gain;
+        this.R0 = R0;
+        this.fatality = fatality;
+        this.incubation = incubation;
+        this.infectious = infectious;
     }
    // Setter Methods
-    public void setRecov(double newRate){
-        recovery_rate = newRate;
+    public void setImmunity(double newRate){
+        immunity_gain = newRate;
     }
     
-    public void setInf(double newInf){
-        inf_period = newInf;
+    public void setInf(int newRate){
+        infectious = newRate;
     }
 
-    public void setAttackRate(double newAttackRate){
-        attack_rate = newAttackRate;
-    }
-    // Getter methods 
-    public double getRecov(){
-        return recovery_rate;
-    }
-    
-    public double getInf(){
-        return inf_period;
+    public void setAttackRate(double newRate){
+        R0 = newRate;
     }
 
-    public double getAttackRate(){
-        return attack_rate;
+    public void setFatality(double newRate){
+        fatality = newRate;
+    }
+
+    public void setIncubation(int newRate){
+        incubation = newRate;
+    }
+    // Getter methods
+    public double getImmunity(){
+        return immunity_gain;
+    }
+
+    public double getFatality(){
+        return fatality;
+    }
+
+    public double getR0(){
+        return R0;
+    }
+
+    public int getIncubation(){
+        return incubation;
+    }
+
+    public int getInfectious(){
+        return infectious;
     }
 }
