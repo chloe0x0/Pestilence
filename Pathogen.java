@@ -20,11 +20,11 @@ public class Pathogen {
         immunity_gain = newRate;
     }
     
-    public void setInf(int newRate){
+    public void setInfectious(int newRate){
         infectious = newRate;
     }
 
-    public void setAttackRate(double newRate){
+    public void setR0(double newRate){
         R0 = newRate;
     }
 
