@@ -25,9 +25,8 @@ public class engine {
 
     private int width, height, iteration, populationCount;
     private int[][] lattice, neighbourhood;
-    // later we could add the potential for simulating multiple pathogens
     private Pestilence.Pathogen pathogen;
-    private String[][] statistics;
+    private ArrayList<String[]> statistics;
     public engine(int dimX, int dimY, String n_str){
         this.lattice = new int[dimX][dimY];
         this.neighbourhood = getNeighbourhood(n_str);
@@ -35,9 +34,10 @@ public class engine {
         this.height = dimY;
         this.populationCount = width * height;
         this.iteration = 0;
-        this.pathogen = new Pathogen(0.0, 0.0, 0.0);
-        ArrayList<String[]> statistics = new ArrayList<String[]>();
+        this.pathogen = new Pathogen(0.0, 0.0, 0, 0, 0.0);
+        this.statistics = new ArrayList<String[]>();
     }
+
     // get relevant neighborhood given string
     public int[][] getNeighbourhood(String n_str){
         switch ( n_str.toLowerCase() ){
@@ -58,10 +58,12 @@ public class engine {
         }
     }
     // initialize Pathogen and seed infections
-    public void engineInit(double recovery_rate, double inf_period, double attack_rate, double infection_seed){
-        pathogen.setRecov(recovery_rate);
-        pathogen.setInf(inf_period);
-        pathogen.setAttackRate(attack_rate);
+    public void engineInit(double R0, double fatality, int incubation, int infectious, double immunity_gain, double infection_seed){
+        pathogen.setImmunity(immunity_gain);
+        pathogen.setR0(R0);
+        pathogen.setFatality(fatality);
+        pathogen.setIncubation(incubation);
+        pathogen.setInfectious(infectious);
 
         seedInfected(infection_seed);
     }
@@ -79,7 +81,7 @@ public class engine {
 
         return states;
     }
-    // select a random neighbouring cell, if rand() < Pathogen's attack rate and cell is susceptible we convert it to Infected.
+    // select a random neighbouring cell, if rand() < Pathogen's R0 and cell is susceptible we convert it to Infected.
     public void infectCell(int x, int y){
         int random_neighbour_ix = ThreadLocalRandom.current().nextInt(0, neighbourhood.length);
         int[] offset = neighbourhood[random_neighbour_ix];
@@ -89,14 +91,15 @@ public class engine {
             return;
         }
 
-        if (Math.random() < pathogen.getAttackRate()){
+        if (Math.random() < pathogen.getR0()){
             lattice[x + offset[0]][y + offset[1]] = 1;
         }
 
     }
+
     // function to be applied on every infected cell. 
     public int logic(int x, int y){
-        if (Math.random() < pathogen.getRecov()){
+        if (Math.random() < pathogen.getImmunity()){
             return 2;
         }
         else{
@@ -104,10 +107,9 @@ public class engine {
             return 1;
         }
     }
-    // iterate the simulation by a single epoch, applying the logic function to every infected cell
+   // iterate the simulation by a single epoch, applying the logic function to every infected cell
     public void timeStep() throws ArrayIndexOutOfBoundsException{
         ++iteration;
-        trackStatistics();
         for (int x = 1; x < width - 1; ++x){
             for (int y = 1; y < height - 1; ++y){
                 int state = lattice[x][y];
@@ -120,8 +122,9 @@ public class engine {
                 lattice[x][y] = logic(x, y);
             }
         }
+        trackStatistics();
     }
-    // iterate the simulation n times
+   // iterate the simulation n times
     public void nSimulation(int n){
         for (int i = 0; i < n; ++i){
             timeStep();
@@ -131,7 +134,7 @@ public class engine {
     public int[][] getLattice(){
         return lattice;
     }
-    // initialize the infected cells. Iterate over every cell, set it to infected by the given probability
+   // initialize the infected cells. Iterate over every cell, set it to infected by the given probability
     public void seedInfected(double probability){
         for (int x = 0; x < width; ++x){
             for (int y = 0; y < height; ++y){
@@ -153,7 +156,7 @@ public class engine {
         }
         String total, percentage; 
         total = Integer.toString(sum);
-        percentage = String.format("%.02f", (float)sum/(float)populationCount * 100)+"%";
+        percentage = String.format("%.02f", (float)sum/(float)populationCount * 100);
         return new String[] {total, percentage};
     }
 
@@ -171,28 +174,14 @@ public class engine {
         };
 
         statistics.add(rowData);
+        
     }
 
     public void extractToCSV(String fileName) throws IOException{
         FileWriter  csvWriter = new FileWriter(fileName);
         // CSV structure is as follows
         // Epoch, S, I, R, total_population
-        csvWriter.append("iteration");
-        csvWriter.append(",");
-        csvWriter.append("S");
-        csvWriter.append(",");
-        csvWriter.append("I");
-        csvWriter.append(",");
-        csvWriter.append("R");
-        csvWriter.append(",");
-        csvWriter.append("Population");
-        csvWriter.append(",");
-        csvWriter.append("S%");
-        csvWriter.append(",");
-        csvWriter.append("I%");
-        csvWriter.append(",");
-        csvWriter.append("R%");
-        csvWriter.append("\n");
+        csvWriter.append("iteration,S,I,R,Population,S%,I%,R%");
 
         for (String[] rowData : statistics){
             csvWriter.append(String.join(",", rowData));
@@ -201,3 +190,4 @@ public class engine {
         csvWriter.flush(); 
         csvWriter.close();
     }
+}
