@@ -5,6 +5,7 @@ import java.lang.Math;
 import java.lang.Double;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.ArrayList;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class engine {
         this.populationCount = width * height;
         this.iteration = 0;
         this.pathogen = new Pathogen(0.0, 0.0, 0.0);
-        List<List<String>> statistics = ;
+        ArrayList<String[]> statistics = new ArrayList<String[]>();
     }
     // get relevant neighborhood given string
     public int[][] getNeighbourhood(String n_str){
@@ -106,6 +107,7 @@ public class engine {
     // iterate the simulation by a single epoch, applying the logic function to every infected cell
     public void timeStep() throws ArrayIndexOutOfBoundsException{
         ++iteration;
+        trackStatistics();
         for (int x = 1; x < width - 1; ++x){
             for (int y = 1; y < height - 1; ++y){
                 int state = lattice[x][y];
@@ -139,7 +141,7 @@ public class engine {
             }
         }
     }
-    // unfinished functions to extract simulation data to CSV
+    // functions to extract simulation data to CSV
     public String[] extractStatistics(int state){
         int sum = 0;
         for (int[] x : lattice){
@@ -155,12 +157,23 @@ public class engine {
         return new String[] {total, percentage};
     }
 
+    public void trackStatistics(){
+        String[] S, I, R;
+        S = extractStatistics(0);
+        I = extractStatistics(1);
+        R = extractStatistics(2);
 
-    public void 
+        String[] rowData = {
+            Integer.toString(iteration),
+            S[0], I[0], R[0],
+            Integer.toString(populationCount),
+            S[1], I[1], R[1]
+        };
 
+        statistics.add(rowData);
+    }
 
-
-    public void extractToCSV(String fileName, String[][] rowData) throws IOException{
+    public void extractToCSV(String fileName) throws IOException{
         FileWriter  csvWriter = new FileWriter(fileName);
         // CSV structure is as follows
         // Epoch, S, I, R, total_population
@@ -188,4 +201,3 @@ public class engine {
         csvWriter.flush(); 
         csvWriter.close();
     }
-}
