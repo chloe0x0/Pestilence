@@ -179,14 +179,4 @@ public class engine {
         csvWriter.flush(); 
         csvWriter.close();
     }
-
-   
-    public static void main(String[] args) throws IOException{
-        engine e = new engine(50, 50, "moore"); 
-        e.engineInit(0.005, 100, 0.5, 0.005);
-        e.extractToCSV("dataTest.csv");
-        e.nSimulation(50);
-        e.extractToCSV("dataTest.csv");
-    }
-
 }
