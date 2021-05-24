@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class engine {
+    // Hard coded neighbourhoods in terms of <x, y> offsets
     private final int[][] moore_neighbourhood = {
         {-1, -1}, {0, -1}, {1, -1},
         {-1, 0},           {1, 0},
@@ -23,6 +24,7 @@ public class engine {
 
     private int width, height, iteration, populationCount;
     private int[][] lattice, neighbourhood;
+    // later we could add the potential for simulating multiple pathogens
     private Pestilence.Pathogen pathogen;
     private String[][] statistics;
     public engine(int dimX, int dimY, String n_str){
@@ -35,11 +37,17 @@ public class engine {
         this.pathogen = new Pathogen(0.0, 0.0, 0.0);
         List<List<String>> statistics = ;
     }
-
+    // get relevant neighborhood given string
     public int[][] getNeighbourhood(String n_str){
-        return n_str.toLowerCase() == "moore" ? moore_neighbourhood : von_neuman_neighbourhood; 
+        switch ( n_str.toLowerCase() ){
+            case "moore":
+                return moore_neighbourhood;
+                break;
+            case "von neuman":
+                return von_neuman_neighbourhood;
+                break;
     }
-
+    // set custom neighbourhood, check first if invalid
     public void setCustomNeighbourhood(int[][] newNeighbourhood){
         if (newNeighbourhood.length == 0){
             throw new ArrayIndexOutOfBoundsException("Empty neighbourhood");
@@ -48,7 +56,7 @@ public class engine {
             neighbourhood = newNeighbourhood;
         }
     }
-
+    // initialize Pathogen and seed infections
     public void engineInit(double recovery_rate, double inf_period, double attack_rate, double infection_seed){
         pathogen.setRecov(recovery_rate);
         pathogen.setInf(inf_period);
@@ -56,7 +64,8 @@ public class engine {
 
         seedInfected(infection_seed);
     }
-
+    // Given the 2D array of x, y offsets compute the states of neighbouring cells
+    // iterate over each <x, y> offset array in neighbourhood, index into the cell and append to states array
     public int[] getNeighbourStates(int x, int y){
         int[] states = new int[neighbourhood.length];
 
@@ -69,7 +78,7 @@ public class engine {
 
         return states;
     }
-
+    // select a random neighbouring cell, if rand() < Pathogen's attack rate and cell is susceptible we convert it to Infected.
     public void infectCell(int x, int y){
         int random_neighbour_ix = ThreadLocalRandom.current().nextInt(0, neighbourhood.length);
         int[] offset = neighbourhood[random_neighbour_ix];
@@ -84,7 +93,7 @@ public class engine {
         }
 
     }
-
+    // function to be applied on every infected cell. 
     public int logic(int x, int y){
         if (Math.random() < pathogen.getRecov()){
             return 2;
@@ -94,7 +103,7 @@ public class engine {
             return 1;
         }
     }
-
+    // iterate the simulation by a single epoch, applying the logic function to every infected cell
     public void timeStep() throws ArrayIndexOutOfBoundsException{
         ++iteration;
         for (int x = 1; x < width - 1; ++x){
@@ -110,17 +119,17 @@ public class engine {
             }
         }
     }
-
+    // iterate the simulation n times
     public void nSimulation(int n){
         for (int i = 0; i < n; ++i){
             timeStep();
         }
     }
-
+    // getter method to return the lattice
     public int[][] getLattice(){
         return lattice;
     }
-
+    // initialize the infected cells. Iterate over every cell, set it to infected by the given probability
     public void seedInfected(double probability){
         for (int x = 0; x < width; ++x){
             for (int y = 0; y < height; ++y){
@@ -130,7 +139,7 @@ public class engine {
             }
         }
     }
-
+    // unfinished functions to extract simulation data to CSV
     public String[] extractStatistics(int state){
         int sum = 0;
         for (int[] x : lattice){
