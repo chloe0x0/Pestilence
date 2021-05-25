@@ -55,8 +55,6 @@ class DisplayPanel extends JPanel implements KeyListener{
                 }
             }
         }
-        g.setColor(Color.BLACK);
-        g.drawString(Integer.toString(e.getIteration()), 150, 150);
     }
 
     public void epoch(){
