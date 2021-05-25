@@ -6,7 +6,6 @@ import java.lang.Double;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import java.io.FileWriter;
 import java.io.IOException;
