@@ -129,9 +129,6 @@ public class display{
         Frame f = new Frame(width, height);
         f.p.engine_init(R0, fatality, incubation, infectious, immunity_gain, infection_seed);
         while(f.p.isVisible()){
-            if (f.p.e.getIteration() == 15){
-                f.p.e.extractToCSV("dataTest.csv");
-            }
             f.p.epoch();
             f.p.repaint();
             Thread.sleep(10);
