@@ -159,7 +159,7 @@ public class engine {
             for (int y = 1; y < height - 1; ++y){
                 int state = lattice[x][y].state;
                 
-                if (state == 1 || state == 4){
+                if (state == 1 || state == 4 || state == 0){
                     continue;
                 }
                // int[] neighbour_states = getNeighbourStates(x, y);
