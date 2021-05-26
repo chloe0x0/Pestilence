@@ -106,7 +106,7 @@ public class engine {
         }
 
         if (Math.random() < pathogen.getR0()){
-            lattice[x + offset[0]][y + offset[1]].state = 3;
+            lattice[x + offset[0]][y + offset[1]].state = 2;
         }
 
     }
@@ -127,16 +127,21 @@ public class engine {
         // Infected cell
         else if (c.state == 3){
             if (c.timeInfected >= pathogen.getInfectious()){
-                // cell either dies or is made immune
-                if (Math.random() < pathogen.getFatality()){
-                    c.timeInfected = 0;
-                    return 0;
-                }
-                else{
+                if (Math.random() < pathogen.getImmunity()){
                     c.timeInfected = 0;
                     return 4;
                 }
+                else{
+                    c.timeInfected = 0;
+                    return 1;
+                }
             }
+
+            else if (Math.random() < pathogen.getFatality()){
+                c.timeInfected = 0;
+                return 0;
+            }
+
             else{
                 infectCell(x, y);
                 ++c.timeInfected;
@@ -234,7 +239,7 @@ public class engine {
         FileWriter  csvWriter = new FileWriter(fileName);
         // CSV structure is as follows
         // Epoch, S, I, R, total_population
-        csvWriter.append("iteration, S, Ic, I, D, Im, Population, S%, I%, Ic%, D%, Im%");
+        csvWriter.append("iteration,S,Ic,I,D,Im,Population,S%,I%,Ic%,D%,Im%\n");
 
         for (String[] rowData : statistics){
             csvWriter.append(String.join(",", rowData));
@@ -243,4 +248,11 @@ public class engine {
         csvWriter.flush(); 
         csvWriter.close();
     }
+    /*
+    public static void main(String[] args) throws IOException{
+        engine e = new engine(600, 600, "moore", true);
+        e.engineInit(0.25, 0.68, 7, 15, 0.5, 0.005);
+        e.nSimulation(250);
+        e.extractToCSV("dataTest.csv");
+    }*/
 }
