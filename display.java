@@ -33,26 +33,25 @@ class DisplayPanel extends JPanel implements KeyListener{
         engine.cell[][] lattice = e.getLattice();
         for (int x = 0; x < lattice.length; ++x){
             for (int y = 0; y < lattice[0].length; ++y){
-                if (lattice[x][y].state == 0){
-                    g.setColor(Color.GRAY);
-                    g.fillRect(x, y, 1, 1);
+                int state = lattice[x][y].state;
+                switch ( state ){
+                    case 0:
+                        g.setColor(Color.GRAY);
+                        break;
+                    case 1:
+                        g.setColor(Color.GREEN);
+                        break;
+                    case 2:
+                        g.setColor(Color.YELLOW);
+                        break;
+                    case 3:
+                        g.setColor(Color.RED);
+                        break;
+                    case 4:
+                        g.setColor(Color.BLUE);
+                        break;
                 }
-                else if (lattice[x][y].state == 1){
-                    g.setColor(Color.GREEN);
-                    g.fillRect(x, y, 1, 1);
-                }
-                else if (lattice[x][y].state == 2){
-                    g.setColor(Color.YELLOW);
-                    g.fillRect(x, y, 1, 1);
-                }
-                else if (lattice[x][y].state == 3){
-                    g.setColor(Color.RED);
-                    g.fillRect(x, y, 1, 1);
-                }
-                else if (lattice[x][y].state == 4){
-                    g.setColor(Color.BLUE);
-                    g.fillRect(x, y, 1, 1);
-                }
+                g.fillRect(x, y, 1, 1);
             }
         }
     }
