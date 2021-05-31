@@ -200,35 +200,51 @@ public class engine {
         }
     }
     // functions to extract simulation data to CSV
-    public String[] extractStatistics(int state){
-        int sum = 0;
+      public String[][] extractStatistics(){
+        int[] StateSums = new int[5];
+
         for (cell[] x : lattice){
             for (cell c : x){
-                if (c.state == state){
-                    ++sum;
+                switch ( c.state ){
+                    case 0:
+                        StateSums[0]++;
+                        break;
+                    case 1:
+                        StateSums[1]++;
+                        break;
+                    case 2:
+                        StateSums[2]++;
+                        break;
+                    case 3:
+                        StateSums[3]++;
+                        break;
+                    case 4:
+                        StateSums[4]++;
+                        break;
                 }
             }
         }
-        String total, percentage; 
-        total = Integer.toString(sum);
-        percentage = String.format("%.02f", (float)sum/(float)populationCount * 100);
-        return new String[] {total, percentage};
+
+        String[][] data = new String[5][2];
+
+
+        for (int ix = 0; ix < 5; ++ix){
+            String total, percentage;
+            total = Integer.toString(StateSums[ix]);
+            percentage = String.format("%.02f", (float)StateSums[ix]/(float)populationCount * 100);
+            data[ix] = new String[] {total, percentage};
+        }
+        return data;
     }
-
+    // Cell states = {Dead, Susceptible, Incubating, Infected/Infectious, Immune}
     public void trackStatistics(){
-        String[] S, Ic, I, D, Im;
-        S = extractStatistics(1);
-        I = extractStatistics(3);
-        Ic = extractStatistics(2);
-        D = extractStatistics(0);
-        Im = extractStatistics(4);
-
+        String[][] data = extractStatistics();
 
         String[] rowData = {
             Integer.toString(iteration),
-            S[0], Ic[0], I[0], D[0], Im[0],
+            data[0][0], data[1][0], data[2][0], data[3][0], data[4][0],
             Integer.toString(populationCount),
-            S[1], Ic[1], I[1], D[1], Im[1]
+            data[0][1], data[1][1], data[2][1], data[3][1], data[4][1]
         };
 
         statistics.add(rowData);
