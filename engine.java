@@ -253,9 +253,7 @@ public class engine {
 
     public void extractToCSV(String fileName) throws IOException{
         FileWriter  csvWriter = new FileWriter(fileName);
-        // CSV structure is as follows
-        // Epoch, S, I, R, total_population
-        csvWriter.append("iteration,S,Ic,I,D,Im,Population,S%,I%,Ic%,D%,Im%\n");
+        csvWriter.append("iteration,D,S,Ic,I,Im,Population,D%,S%,I%,Ic%,Im%\n");
 
         for (String[] rowData : statistics){
             csvWriter.append(String.join(",", rowData));
