@@ -132,8 +132,14 @@ public class engine {
                     return 0;
                 }           
                 else{
-                    c.timeInfected = 0;
-                    return 4;
+                    if (Math.random() < pathogen.getImmunity()){
+                        c.timeInfected = 0;
+                        return 4;
+                    }
+                    else{
+                        c.timeInfected = 0;
+                        return 1;
+                    }
                 }
             }
             else{
@@ -144,7 +150,7 @@ public class engine {
         }
         return c.state;
     }
-    // iterate the simulation by a single epoch, applying the logic function to every incubated/ infected cell
+      // iterate the simulation by a single epoch, applying the logic function to every incubated/ infected cell
    // it is unnescary to consider any cells which are not either Incubating or Infected is because no logic needs to be applied to them
    // thus we can simply continue in the loop
     public void timeStep() throws ArrayIndexOutOfBoundsException{
