@@ -125,19 +125,17 @@ public class engine {
             ++c.timeInfected;
         }
         // Infected cell
-        else if (c.state == 3){                
-            if (c.timeInfected >= pathogen.getInfectious()){     
+        else if (c.state == 3){   
+            if (c.timeInfected >= pathogen.getInfectious()){    
+                c.timeInfected = 0;
                 if (Math.random() < pathogen.getFatality()){
-                    c.timeInfected = 0;
                     return 0;
                 }           
                 else{
                     if (Math.random() < pathogen.getImmunity()){
-                        c.timeInfected = 0;
                         return 4;
                     }
                     else{
-                        c.timeInfected = 0;
                         return 1;
                     }
                 }
