@@ -13,6 +13,8 @@ The Pathogen object stores data pertaining to the simulated Pathogen:
 4. incubation: Time in frames/ iterations that a cell is Incubating
 5. infectious: Time in frames/ iterations that a cell is Infectious
 
+### Through tweaking parameters one can generalize the model to any compartmental model:
+
 #### Example run with an SIRS model:
 parameters:
 1. R0 = 0.45
