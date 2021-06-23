@@ -1,13 +1,14 @@
 # Pestilence
 Basic Epidemic modeler using cellular automaton in Java 
 
-## Pathogen: 
-The Pathogen object holds data relevant to the simulated Pathogen. Such as: R0, incubation period, and fatality rate
-## Display: 
-primitive GUI to visualize a simulation
-## Engine: 
-Handles the simulation computations, and can be set to track simulation statistics to be output to a CSV. The engine uses a spatial SIRS model, though it can be generalized to other compartmental models by nullifying certain parameters such as immunity loss. (The effect of setting immunity loss to 0.0 is transforming the SIRS model to a SIR model)
+#### The Algorithim
+Pestilence uses a 2 dimensional lattice to simulate epidemic scenarios. Each cell's state is either Susceptible, Incubating, Infectious, Dead, or Immune. 
+The lattice is updated by looping over each incubating and infectious cell. If the cell is infectious, and its timeInfected is equal to the incubation period of the Pathogen object, it moves on to the infectious state and its timeInfected reset. Otherwise, its timeInfected increments. If the cell is infectious, a random neighbour is chosen and has a probability of being infected (Susceptible -> Incubating), this proability is the R0 parameter of the Pathogen object. And its timeInfected incremented.
 
-# TODO
-1. Rather than iterating over the entire lattice and performing an if statement to check if we pass the cell through the logic function, it should instead store an ArrayList<> of all positions which need to be passed through logic(). This optimazation should allow faster simulations on large lattices. 
-2. Add live graphing of statistics into display.java
+#### Pathogen Object 
+The Pathogen object stores data pertaining to the simulated Pathogen:
+1. immunity_gain: The probability that, upon reaching the end of their infectious period, an infectious cell will transfer to the Immune state
+2  R0: The probability that an infection is successfully transmitted (Susceptible -> Infected)
+3. fatality: The probability that, upon reaching the end of their infectious period, an infectious cell will transfer to the Dead state
+4. incubation: Time in frames/ iterations that a cell is Incubating
+5. infectious: Time in frames/ iterations that a cell is Infectious
