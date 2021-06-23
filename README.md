@@ -35,3 +35,14 @@ parameters:
 6. infection seed probability = 0.0005 (probability that a cell is initialized as infected at epoch 0)
 
 ![alt text](figures/SIR.png)
+
+#### Example run with an SIS model:
+parameters:
+1. R0 = 0.45
+2. fatality = 0.0
+3. incubation = 2
+4. infectious = 12
+5. immunity_gain = 0.0
+6. infection seed probability = 0.0005 (probability that a cell is initialized as infected at epoch 0)
+
+![alt text](figures/SIS.png)
