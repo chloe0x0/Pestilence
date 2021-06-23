@@ -8,7 +8,7 @@ The lattice is updated by looping over each incubating and infectious cell. If t
 #### Pathogen Object 
 The Pathogen object stores data pertaining to the simulated Pathogen:
 1. immunity_gain: The probability that, upon reaching the end of their infectious period, an infectious cell will transfer to the Immune state
-2  R0: The probability that an infection is successfully transmitted (Susceptible -> Infected)
+2.  R0: The probability that an infection is successfully transmitted (Susceptible -> Infected)
 3. fatality: The probability that, upon reaching the end of their infectious period, an infectious cell will transfer to the Dead state
 4. incubation: Time in frames/ iterations that a cell is Incubating
 5. infectious: Time in frames/ iterations that a cell is Infectious
