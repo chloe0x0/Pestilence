@@ -12,3 +12,26 @@ The Pathogen object stores data pertaining to the simulated Pathogen:
 3. fatality: The probability that, upon reaching the end of their infectious period, an infectious cell will transfer to the Dead state
 4. incubation: Time in frames/ iterations that a cell is Incubating
 5. infectious: Time in frames/ iterations that a cell is Infectious
+
+#### Example run with an SIRS model:
+parameters:
+1. R0 = 0.45
+2. fatality = 0.0
+3. incubation = 2
+4. infectious = 12
+5. immunity_gain = 0.75
+6. infection seed probability = 0.0005 (probability that a cell is initialized as infected at epoch 0)
+
+![alt text](figures/SIRS.png)
+
+
+#### Example run with an SIR model:
+parameters:
+1. R0 = 0.45
+2. fatality = 0.0
+3. incubation = 2
+4. infectious = 12
+5. immunity_gain = 1.0
+6. infection seed probability = 0.0005 (probability that a cell is initialized as infected at epoch 0)
+
+![alt text](figures/SIR.png)
