@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from typing import List
 
 def readCSV(filename : str, features : List[str])->object:
-    df = pd.read_csv(f"{filename}.csv)
+    df = pd.read_csv(f"{filename}.csv")
     df = df[features]
     return df
 
